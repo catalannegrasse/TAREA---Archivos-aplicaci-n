@@ -1,0 +1,96 @@
+## Ejemplo
+# Mostrar un menú para el usuario con las siguientes opciones:
+# 1 - Listar todos los archivos
+# 2 - Mostrar el directorio de trabajo actual
+# 3 - Listar los archivos según condición (pedir la condición)
+# 4 - Crear una nueva carpeta (si no existe)
+# 5 - Borrar una carpeta (avisar si falla)
+# 6 - Copiar un archivo con otro nombre (pedir al usuario el nombre y verificar que exista)
+# 0 - Salir del Programa
+
+from pathlib import Path
+import shutil
+
+print("1 - Lista de todos los archivos")
+print("2 - Directorio de trabajo actual")
+print("3 - Lista de archivos segun condicion")
+print("4 - Crear un nueva carpeta")
+print("5 - Borrar una carpeta ")
+print("6 - Copiar un archivo con otro nombre")
+print("0 - Salir del Programa")
+
+accion = int(input("Elija un numero en base a la accion que quiera hacer "))
+
+ruta1 = Path('.')
+
+if accion == 1: 
+
+    for archivo in ruta1.iterdir():
+        print(F"Archivo {archivo}")
+
+elif accion == 2: 
+
+    print(F"El directorio actual de trabajo es {Path.cwd()}")
+
+elif accion == 3: 
+
+    condicion = input("Decir la condicion (parte del nombre del archivo) ")
+
+    for i in ruta1.iterdir():
+        if condicion in i.name:
+            print(i)
+
+elif accion == 4: 
+
+    carpeta = Path(input("Ingrese el nombre de la carpeta "))
+
+    if carpeta.exists():
+        print("Esa carpeta ya existe")
+    else:
+        carpeta.mkdir()
+        print("La carpeta se creo con exito")
+
+elif accion == 5: 
+
+    eliminar = Path(input("Cual es la carpeta que quiere borrar "))
+
+    if eliminar.exists() and eliminar.is_dir():
+        try:
+            eliminar.rmdir()
+            print("La carpeta se eliminó con éxito.")
+        except Exception as e:
+            print(F"La carpeta no se pudo eliminar porque {e}")
+    else:
+        print("La carpeta que quiere eliminar no existe.")
+
+elif accion == 6:
+
+    archivo = input("Que archivo deseas copiar(nombre y extensión) ")
+    archivo_encontrado = False
+
+    for i in ruta1.iterdir():
+        if i.name == archivo:
+            archivo_encontrado = True
+            nuevo_nombre = input("Con que nombre deseas gaurdar la copia ")
+            destino = ruta1 / nuevo_nombre
+            shutil.copy(i, destino)
+            print("El archivo se copió con éxito como", nuevo_nombre)
+            break
+
+    if not archivo_encontrado:
+        print("Ese archivo no existe.")
+
+elif accion == 0: 
+
+    print("Saliendo del programa")
+
+
+
+
+
+
+
+
+
+
+
